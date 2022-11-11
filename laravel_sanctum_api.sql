@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 09, 2022 at 07:57 PM
+-- Generation Time: Nov 11, 2022 at 11:40 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.1
 
@@ -38,14 +38,6 @@ CREATE TABLE `admins` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `admins`
---
-
-INSERT INTO `admins` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$gXjGfV6DxPD6cHpsOm5A5ON47I2.P9vsEhH0pe.xEUV2a.ZN2O1ue', NULL, '2022-11-09 11:11:45', '2022-11-09 11:11:45'),
-(2, 'Admin2', 'admin2@gmail.com', NULL, '$2y$10$eTl.i8M7d5F7HbHaAgXlTuRTD4BOvrjaDeV86QybRaJS0OjiXPgm2', NULL, '2022-11-09 11:14:24', '2022-11-09 11:14:24');
 
 -- --------------------------------------------------------
 
@@ -101,7 +93,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '2014_10_12_100000_create_password_resets_table', 1),
 (4, '2019_08_19_000000_create_failed_jobs_table', 1),
 (5, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(6, '2022_08_22_161534_create_jobs_table', 1);
+(6, '2022_08_22_161534_create_jobs_table', 1),
+(7, '2022_11_10_171721_create_purchases_table', 1),
+(9, '2022_11_10_172006_create_products_table', 2),
+(11, '2022_11_10_172111_create_product_stocks_table', 3),
+(12, '2022_11_10_171811_create_purchase_lines_table', 4);
 
 -- --------------------------------------------------------
 
@@ -136,6 +132,107 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `discount` double(8,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `price`, `discount`, `created_at`, `updated_at`) VALUES
+(1, 'Lactogen 1 180gm', 245.00, 0.00, '2022-11-11 12:12:25', '2022-11-11 12:12:25'),
+(2, 'Lactogen 2 180gm', 245.00, 0.00, '2022-11-11 12:12:25', '2022-11-11 12:12:25'),
+(3, 'Lactogen 3 180gm', 245.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(4, 'Lactogen 4 180gm', 245.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(5, 'Lactogen 1 350gm', 478.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(6, 'Lactogen 2 350gm', 478.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(7, 'Lactogen 3 350gm', 478.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(8, 'Lactogen 4 350gm', 478.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(9, 'Lactogen 1 Tin 400gm', 600.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(10, 'Lactogen 2 Tin 400gm', 600.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(11, 'Lactogen 3 Tin 400gm', 600.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_stocks`
+--
+
+CREATE TABLE `product_stocks` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total` double(8,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_stocks`
+--
+
+INSERT INTO `product_stocks` (`id`, `product_id`, `price`, `quantity`, `total`, `created_at`, `updated_at`) VALUES
+(1, 1, 245.00, 0, 0.00, '2022-11-11 12:12:25', '2022-11-11 16:37:46'),
+(2, 2, 245.00, 0, 0.00, '2022-11-11 12:12:25', '2022-11-11 12:12:25'),
+(3, 3, 245.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(4, 4, 245.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(5, 5, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 16:35:41'),
+(6, 6, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(7, 7, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(8, 8, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(9, 9, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 16:35:41'),
+(10, 10, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
+(11, 11, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchases`
+--
+
+CREATE TABLE `purchases` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invoice_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` double(8,2) NOT NULL,
+  `shipping_charge` double(8,2) NOT NULL,
+  `discount` double(8,2) NOT NULL,
+  `total` double(8,2) NOT NULL,
+  `status` enum('ordered','pending','completed') COLLATE utf8mb4_unicode_ci DEFAULT 'ordered',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_lines`
+--
+
+CREATE TABLE `purchase_lines` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `purchase_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `discount` double(8,2) NOT NULL,
+  `total` double(8,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -149,14 +246,6 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Anwar', 'anwar@gmail.com', NULL, '$2y$10$UMCESt3EJcNVXXNGPfZw8eCi99JGASKgejQs67Oiy19ccP7HnYuRa', NULL, '2022-11-09 11:11:51', '2022-11-09 11:11:51'),
-(2, 'Hossain', 'hossain@gmail.com', NULL, '$2y$10$/oerTXMZ7mbUyPM/Do0vz.r2I4hUdRecASoiq0HDdPheiAy.0kk0u', NULL, '2022-11-09 11:14:00', '2022-11-09 11:14:00');
 
 --
 -- Indexes for dumped tables
@@ -204,6 +293,33 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_stocks`
+--
+ALTER TABLE `product_stocks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_stocks_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `purchases`
+--
+ALTER TABLE `purchases`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `purchase_lines`
+--
+ALTER TABLE `purchase_lines`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `purchase_lines_purchase_id_foreign` (`purchase_id`),
+  ADD KEY `purchase_lines_product_id_foreign` (`product_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -218,7 +334,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -236,19 +352,60 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `product_stocks`
+--
+ALTER TABLE `product_stocks`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `purchases`
+--
+ALTER TABLE `purchases`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `purchase_lines`
+--
+ALTER TABLE `purchase_lines`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `product_stocks`
+--
+ALTER TABLE `product_stocks`
+  ADD CONSTRAINT `product_stocks_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `purchase_lines`
+--
+ALTER TABLE `purchase_lines`
+  ADD CONSTRAINT `purchase_lines_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `purchase_lines_purchase_id_foreign` FOREIGN KEY (`purchase_id`) REFERENCES `purchases` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
