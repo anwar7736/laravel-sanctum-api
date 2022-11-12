@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2022 at 11:40 PM
+-- Generation Time: Nov 12, 2022 at 01:33 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.1
 
@@ -139,7 +139,7 @@ CREATE TABLE `products` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` double(8,2) NOT NULL,
-  `discount` double(8,2) NOT NULL,
+  `discount` double(8,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -151,7 +151,6 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `name`, `price`, `discount`, `created_at`, `updated_at`) VALUES
 (1, 'Lactogen 1 180gm', 245.00, 0.00, '2022-11-11 12:12:25', '2022-11-11 12:12:25'),
 (2, 'Lactogen 2 180gm', 245.00, 0.00, '2022-11-11 12:12:25', '2022-11-11 12:12:25'),
-(3, 'Lactogen 3 180gm', 245.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
 (4, 'Lactogen 4 180gm', 245.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
 (5, 'Lactogen 1 350gm', 478.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
 (6, 'Lactogen 2 350gm', 478.00, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
@@ -182,17 +181,16 @@ CREATE TABLE `product_stocks` (
 --
 
 INSERT INTO `product_stocks` (`id`, `product_id`, `price`, `quantity`, `total`, `created_at`, `updated_at`) VALUES
-(1, 1, 245.00, 0, 0.00, '2022-11-11 12:12:25', '2022-11-11 16:37:46'),
-(2, 2, 245.00, 0, 0.00, '2022-11-11 12:12:25', '2022-11-11 12:12:25'),
-(3, 3, 245.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
-(4, 4, 245.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
-(5, 5, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 16:35:41'),
-(6, 6, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
-(7, 7, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
-(8, 8, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
-(9, 9, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 16:35:41'),
-(10, 10, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26'),
-(11, 11, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-11 12:12:26');
+(1, 1, 245.00, 0, 0.00, '2022-11-11 12:12:25', '2022-11-12 04:38:53'),
+(2, 2, 245.00, 10, 2450.00, '2022-11-11 12:12:25', '2022-11-12 04:39:21'),
+(4, 4, 245.00, 1, 245.00, '2022-11-11 12:12:26', '2022-11-12 06:26:48'),
+(5, 5, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-12 04:37:58'),
+(6, 6, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-12 03:31:42'),
+(7, 7, 478.00, 21, 10038.00, '2022-11-11 12:12:26', '2022-11-12 04:45:30'),
+(8, 8, 478.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-12 03:31:42'),
+(9, 9, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-12 04:20:04'),
+(10, 10, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-12 04:15:58'),
+(11, 11, 600.00, 0, 0.00, '2022-11-11 12:12:26', '2022-11-12 04:15:27');
 
 -- --------------------------------------------------------
 
@@ -212,6 +210,15 @@ CREATE TABLE `purchases` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `purchases`
+--
+
+INSERT INTO `purchases` (`id`, `invoice_no`, `amount`, `shipping_charge`, `discount`, `total`, `status`, `created_at`, `updated_at`) VALUES
+(24, 'INV#83460981', 12010.00, 0.00, 0.00, 12010.00, 'ordered', '2022-11-12 04:39:21', '2022-11-12 04:39:21'),
+(25, 'INV#66166825', 478.00, 0.00, 0.00, 478.00, 'ordered', '2022-11-12 04:45:30', '2022-11-12 06:20:39'),
+(26, 'INV#69424033', 245.00, 0.00, 0.00, 245.00, 'ordered', '2022-11-12 06:26:48', '2022-11-12 06:26:48');
+
 -- --------------------------------------------------------
 
 --
@@ -229,6 +236,16 @@ CREATE TABLE `purchase_lines` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchase_lines`
+--
+
+INSERT INTO `purchase_lines` (`id`, `purchase_id`, `product_id`, `price`, `quantity`, `discount`, `total`, `created_at`, `updated_at`) VALUES
+(62, 24, 2, 245.00, 10, 0.00, 2450.00, '2022-11-12 04:39:21', '2022-11-12 04:39:21'),
+(63, 24, 7, 478.00, 20, 0.00, 9560.00, '2022-11-12 04:39:22', '2022-11-12 04:39:22'),
+(65, 25, 7, 478.00, 1, 0.00, 478.00, '2022-11-12 04:45:30', '2022-11-12 04:45:30'),
+(66, 26, 4, 245.00, 1, 0.00, 245.00, '2022-11-12 06:26:48', '2022-11-12 06:26:48');
 
 -- --------------------------------------------------------
 
@@ -364,25 +381,25 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product_stocks`
 --
 ALTER TABLE `product_stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `purchase_lines`
 --
 ALTER TABLE `purchase_lines`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -14,7 +14,9 @@ class ProductStockController extends Controller
      */
     public function index()
     {
-        //
+        $product_stocks = ProductStock::with('products')->simplePaginate(10);
+
+        return view('product_stock.index', compact('product_stocks'));
     }
 
     /**

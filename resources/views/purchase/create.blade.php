@@ -14,28 +14,30 @@
                     <h3>Add New Purchase</h3>
                 </div>
                 <div class="card-body">
-                    <div align="right" class="mb-2">
-                        <a href="{{route('purchase.index')}}" class="btn btn-secondary">Back >></a>
+                    <div align="left" class="mb-2">
+                        <a href="{{route('purchase.index')}}" class="btn btn-dark">Back</a>
                     </div>
                     <div>
                      <input type="search" id="search_product" class="form-control mb-2" placeholder="Search product...">
                     </div>
                     <form action="{{ route('purchase.store') }}" method="POST" >
                     @csrf
-                    <strong class="text-muted">
-                        Total Amount : <input type="text" value="0" name="total_price" class="total_price" readonly>
-                     </strong>
-                     <strong class="text-muted">
-                        Total Discount : <input type="text" value="0" name="total_discount" class="total_discount" readonly>
-                     </strong>
-                     <strong class="text-muted">
-                        Subtotal : <input type="text" value="0" name="subtotal" class="subtotal" readonly>
-                     </strong>
+                   <div class="row">
+                    <div class="text-muted col-md-4 mt-3">
+                            Total Amount : <input type="text" value="0" name="total_price" class="total_price" readonly>
+                        </div>
+                        <div class="text-muted col-md-4 mt-3">
+                            Total Discount : <input type="text" value="0" name="total_discount" class="total_discount" readonly>
+                        </div>
+                        <div class="text-muted col-md-4 mt-3">
+                            Subtotal : <input type="text" value="0" name="subtotal" class="subtotal" readonly>
+                        </div>
+                   </div>
                      <br><br>
                     <div class="table-responsive">
                         
                         <table class="table table-bordered table-hover purchase_table">
-                            <thead>
+                            <thead class="bg-info">
                                 <tr>
                                     <th>Product</th>
                                     <th width='10px'>Price</th>
@@ -80,10 +82,11 @@
                 data: {query: request.term},
                 success: function(data)
                 {
+                    let result;
                     if(data.length == 0)
                     {
                         toastr.error('Product not found!');
-                        $('#search_product').val('');
+                        //$('#search_product').val('');
                         
                     }
 
@@ -94,18 +97,26 @@
 
                     else if(data.length > 1)
                     {
-                        response(data);
+                        result = $.map(data, function(item){
+                            return {
+                                label: item.name,
+                                value: item.name,
+                                data: item,
+                            }
+                        });
+                       
                     }
-
-                    $('#search_product').val('');
+                    
+                    response(result);
+                    //$('#search_product').val('');
 
                    
                 }
             });
          },
-         select: function(event, data)
+         select: function(event, selectedItem)
          {
-                productAppend(data.item);
+                productAppend(selectedItem.item.data);
                 return false;
          }
        });
@@ -120,7 +131,7 @@
                 html+="<td><input type='text' name='discount[]' class='discount' value='"+item.discount+"' readonly></td>";
                 html+="<td><input type='number' name='quantity[]' class='quantity' value='1' min=1></td>";
                 html+="<td><input type='text' name='total[]' class='total' value='"+item.price+"' readonly></td>";
-                html+="<td><input type='hidden' name='product_id[]' class='product_id' value='"+item.id+"'></td>";
+                html+="<input type='hidden' name='product_id[]' class='product_id' value='"+item.id+"'>";
                 html+="<td><button class='btn btn-danger btn-sm remove' data-id='"+item.id+"'>X</button></td>";
                 html+="</tr>";
 

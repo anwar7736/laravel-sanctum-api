@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edit Purchase')
+@section('title', 'Edit Product')
 @section('css')
 <style>
     
@@ -8,80 +8,48 @@
 @section('content')
 <div class="container mt-3">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header py-3 text-center text-danger">
-                    <h3>Edit Purchase</h3>
+                    <h3>Edit Product</h3>
                 </div>
                 <div class="card-body">
                     <div align="left" class="mb-2">
-                        <a href="{{route('purchase.index')}}" class="btn btn-dark">Back</a>
+                        <a href="{{route('product.index')}}" class="btn btn-dark">Back</a>
                     </div>
+                    <div class="d-none">
                      <input type="search" id="search_product" class="form-control mb-2" placeholder="Search product...">
                     </div>
-                    <div align="center" class="mb-3">
-                        <strong class="text-muted">
-                            Invoice No : <input type="text" value="{{$purchase->invoice_no}}" name="" class="" disabled>
-                        </strong>
-                    </div>
-                    <form action="{{ route('purchase.update', $purchase->id) }}" method="POST" >
-                    @csrf
-                    @method('PUT')
-                    <div class="row">
-                        <div class="text-muted col-md-4 mt-3">
-                            Total Amount : <input type="text" value="{{$purchase->amount}}" name="total_price" class="total_price" readonly>
+                        <form action="{{ route('product.update', $product->id) }}" method="POST" >
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group mt-2">
+                            <label for="name">Product Name*</label>
+                            <input type="text" value="{{ $product->name }}" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Product name..." >
+                            @error('name')
+                                <div>
+                                    <span class="text-danger">{{$message}}</span>
+                                </div>
+                            @enderror
                         </div>
-                        <div class="text-muted col-md-4 mt-3">
-                            Total Discount : <input type="text" value="{{$purchase->discount}}" name="total_discount" class="total_discount" readonly>
+                        <div class="form-group mt-2">
+                            <label for="price">Product Price*</label>
+                            <input type="number" value="{{ $product->price }}" min="1" class="form-control @error('price') is-invalid @enderror" value="" name="price" id="price" placeholder="Product price..." >
+                            @error('price')
+                                <div>
+                                    <span class="text-danger">{{$message}}</span>
+                                </div>
+                            @enderror
                         </div>
-                        <div class="text-muted col-md-4 mt-3">
-                            Subtotal : <input type="text" value="{{$purchase->total}}" name="subtotal" class="subtotal" readonly>
+                        <div class="form-group">
+                            <label for="discount">Product Discount (optional)</label>
+                            <input type="number" value="{{ $product->discount }}" min="1" class="form-control" name="discount" id="discount" placeholder="Product discount..." >
+                        </div>                        
+                        <div class="form-group mt-3" align="center">
+                            <input type="submit" class="btn btn-success px-5" value="Update" >
                         </div>
-                   </div>
-                     <br><br>
-                    <div class="table-responsive">
-                        
-                        <table class="table table-bordered table-hover purchase_table">
-                            <thead class="text-center bg-info">
-                                <tr>
-                                    <th>Product</th>
-                                    <th width='10px'>Price</th>
-                                    <th width='10px'>Discount</th>
-                                    <th width='10px'>Quantity</th>
-                                    <th width='10px'>Total</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                              <tbody id="purchase_data">
-                                @forelse($purchase->lines as $line)
-                                <tr>
-                                    <td>{{$line->products->name}}</td>
-                                    <td><input type='text' name='price[]' class='price' value='{{$line->price}}' readonly></td>
-                                    <td><input type='text' name='discount[]' class='discount' value='{{$line->discount}}' readonly></td>
-                                    <td><input type='number' name='quantity[]' class='quantity' value='{{$line->quantity}}' min=1></td>
-                                    <td><input type='text' name='total[]' class='total' value='{{$line->total}}' readonly></td>
-                                    <input type='hidden' name='product_id[]' class='product_id' value='{{$line->product_id}}'>
-                                    <input type='hidden' name='line_id[]' class='line_id' value='{{$line->id}}'>
-                                    <td><button class='btn btn-danger btn-sm remove' data-id='"+item.id+"'>X</button></td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="7">
-                                        <div class="text-danger text-center">
-                                            <h5>No Data Found!!</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforelse
-                              </tbody>
-                              <tr align="center">
-                                 <td colspan="6">
-                                    <input type="submit" value="Update" class="btn btn-success px-5" id="updateBtn">
-                                </td>
-                              </tr>
-                         
-                            
-                        </table>
+                
+
                         </form>
                     </div>
                 </div>
@@ -155,7 +123,7 @@
                 html+="<td><input type='text' name='discount[]' class='discount' value='"+item.discount+"' readonly></td>";
                 html+="<td><input type='number' name='quantity[]' class='quantity' value='1' min=1></td>";
                 html+="<td><input type='text' name='total[]' class='total' value='"+item.price+"' readonly></td>";
-                html+="<input type='hidden' name='product_id[]' class='product_id' value='"+item.id+"'>";
+                html+="<td><input type='hidden' name='product_id[]' class='product_id' value='"+item.id+"'></td>";
                 html+="<td><button class='btn btn-danger btn-sm remove' data-id='"+item.id+"'>X</button></td>";
                 html+="</tr>";
 
@@ -163,7 +131,7 @@
                 calculateTotal();
                 products.push(item.id);
                 $('#search_product').val('');
-                // $("#updateBtn").attr('disabled', false);
+                $("#submitBtn").attr('disabled', false);
 
             }
        }
@@ -196,10 +164,10 @@
             let index = products.indexOf($(this).data('id'));
             products.splice(index,1);
             calculateTotal();
-            // if(products.length == 0)
-            // {
-            //     $("#updateBtn").attr('disabled', true);
-            // }
+            if(products.length == 0)
+            {
+                $("#submitBtn").attr('disabled', true);
+            }
        });
        $(document).on('keyup change', '.quantity', function(){
             calculateTotal();
