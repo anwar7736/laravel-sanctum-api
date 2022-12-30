@@ -42,3 +42,7 @@ Route::resource('product_stock', ProductStockController::class);
 //Get product search list
 Route::get('/getProductList', [PurchaseController::class, 'getProductList'])->name('product.search');
 // Route::get('/purchase/destroy/{id}', [PurchaseController::class, 'destroy']);
+
+
+
+require __DIR__.'/custom.php';

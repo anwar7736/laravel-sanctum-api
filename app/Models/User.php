@@ -62,4 +62,15 @@ class User extends Authenticatable
     {
         return "Mr. ".$value;
     }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class)->withDefault();
+    }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withPivot(['expire_at']);
+    }
 }
