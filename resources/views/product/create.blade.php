@@ -24,7 +24,7 @@
                         @csrf
                         <div class="form-group mt-2">
                             <label for="name">Product Name*</label>
-                            <input type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Product name..." >
+                            <input type="text" value="Maggi Noodles 496gm" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Product name..." >
                             @error('name')
                                 <div>
                                     <span class="text-danger">{{$message}}</span>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group mt-2">
                             <label for="price">Product Price*</label>
-                            <input type="number" value="{{ old('price') }}" min="1" class="form-control @error('price') is-invalid @enderror" value="" name="price" id="price" placeholder="Product price..." >
+                            <input type="number" value="130" min="1" class="form-control @error('price') is-invalid @enderror" value="" name="price" id="price" placeholder="Product price..." >
                             @error('price')
                                 <div>
                                     <span class="text-danger">{{$message}}</span>

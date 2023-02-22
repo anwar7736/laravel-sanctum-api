@@ -14,9 +14,25 @@ class ProductStockController extends Controller
      */
     public function index()
     {
-        $product_stocks = ProductStock::with('products')->simplePaginate(10);
+       if(request()->ajax())
+       {
+            $query = ProductStock::with('products');
+            $search_query = request('query');
+            $paginate = request('paginate');
 
-        return view('product_stock.index', compact('product_stocks'));
+            if(!empty($search_query)){
+                $query->whereHas('products', function($q) use($search_query) {
+                    $q->where('name', 'like', '%'.$search_query.'%')
+                     ->orWhere('price', 'like', '%'.$search_query.'%');
+                });
+            }            
+    
+            $product_stocks = $query->latest()->paginate($paginate);
+
+            return view('product_stock.stock_data', compact('product_stocks'))->render();
+       }
+
+        return view('product_stock.index');
     }
 
     /**

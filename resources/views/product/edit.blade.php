@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group">
                             <label for="discount">Product Discount (optional)</label>
-                            <input type="number" value="{{ $product->discount }}" min="1" class="form-control" name="discount" id="discount" placeholder="Product discount..." >
+                            <input type="number" value="{{ $product->discount }}" min="0" class="form-control" name="discount" id="discount" placeholder="Product discount..." >
                         </div>                        
                         <div class="form-group mt-3" align="center">
                             <input type="submit" class="btn btn-success px-5" value="Update" >

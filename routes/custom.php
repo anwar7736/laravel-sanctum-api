@@ -7,3 +7,5 @@ use App\Http\Controllers\ExampleController;
 Route::prefix('custom')->group(function(){
     Route::get('users', ExampleController::class);
 });
+
+Route::view('get-message', 'get-message');

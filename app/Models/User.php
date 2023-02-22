@@ -25,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'country_id',
     ];
 
     /**
@@ -58,19 +59,20 @@ class User extends Authenticatable
         $this->attributes['password'] = Hash::make($value);
     }
     
-    public function getNameAttribute($value)
-    {
-        return "Mr. ".$value;
+    public function profile(){
+        return $this->hasOne(Profile::class);
     }
 
-    public function profile()
-    {
-        return $this->hasOne(Profile::class)->withDefault();
+    public function posts(){
+        return $this->hasMany(Post::class);
     }
 
-
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }    
+    
     public function roles()
     {
-        return $this->belongsToMany(Role::class)->withPivot(['expire_at']);
+        return $this->belongsToMany(Role::class);
     }
 }

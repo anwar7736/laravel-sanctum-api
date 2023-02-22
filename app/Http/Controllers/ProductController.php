@@ -7,7 +7,10 @@ use App\Models\ProductStock;
 use App\Models\Purchase;
 use App\Models\PurchaseLine;
 use Illuminate\Http\Request;
-
+use App\Events\ProductCreated;
+use App\Events\ProductUpdated;
+use App\Events\ProductDeleted;
+use Cache;
 class ProductController extends Controller
 {
     /**
@@ -18,8 +21,10 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::latest()->simplePaginate(10);
-
+        $products = Cache::rememberForever('products', function () {
+            return Product::orderBy('id', 'desc')->simplePaginate(10);
+        });
+        
         return view('product.index', compact('products'));
     }
 
@@ -30,6 +35,10 @@ class ProductController extends Controller
      */
     public function create()
     {
+        if(!can('product.create'))
+        {
+            abort(403, 'Unauthorized');
+        }
         return view('product.create');
     }
 
@@ -41,14 +50,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        if(!can('product.create'))
+        {
+            abort(403, 'Unauthorized');
+        }
+
+        $data = $request->validate([
             'name' => ['required', 'min:3', 'unique:products,name'],
             'price' => ['required'],
             'discount' => '',
         ]);
 
-        $product = Product::create($request->all());
-
+        $product = Product::create($data);
+        $this->cache_reset();
+        event(new ProductCreated($product));
         if($product)
         {
             $product_stock = ProductStock::create([
@@ -82,6 +97,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        if(!can('product.update'))
+        {
+            abort(403, 'Unauthorized');
+        }
         return view('product.edit', compact('product'));
     }
 
@@ -94,21 +113,40 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $request->validate([
+        if(!can('product.update'))
+        {
+            abort(403, 'Unauthorized');
+        }
+
+        $data = $request->validate([
             'name' => ['required', 'min:3', 'unique:products,name,'.$product->id],
             'price' => ['required'],
             'discount' => '',
         ]);
 
-        $updated = $product->update($request->all());
+        $updated = $product->update($data);
+        event(new ProductUpdated($product));
+
 
         if($updated)
         {
-            $product_stock = ProductStock::find($product->id);
-            
-           $product_stock->price = $request->price;
-           $product_stock->total = $request->price * $product_stock->quantity;
-           $product_stock->save();
+         
+            $stock = ProductStock::find($product->id);
+            if($stock){
+                $stock->update([
+                    'price' => $data['price'],
+                    'total' => $data['price'] * $stock->quantity,
+                ]);
+            }
+            else{
+                ProductStock::create([
+                    'product_id' => $product->id,
+                    'price' => $data['price'],
+                    'total' => 0,
+                ]);
+            }
+
+           $this->cache_reset();
         }
 
         return redirect()->route('product.index')->with(['status'=>'success', 'message'=>'Product has been updated!']);
@@ -122,6 +160,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if(!can('product.delete'))
+        {
+            abort(403, 'Unauthorized');
+        }
+
        $lines =  PurchaseLine::where('product_id', $product->id)->get();
        if($lines->count())
        {
@@ -135,8 +178,18 @@ class ProductController extends Controller
                 $purchase->save();
            }
        }
-       $product->delete();
 
+
+       event(new ProductDeleted($product));
+       $product->delete();
+       $this->cache_reset();
        return redirect()->route('product.index')->with(['status'=>'success', 'message'=>'Product has been deleted!']);
+    }
+
+    public function cache_reset(){
+        Cache::forget('products');
+        Cache::rememberForever('products', function () {
+            return Product::orderBy('id', 'desc')->simplePaginate(10);
+        });
     }
 }
