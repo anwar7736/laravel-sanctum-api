@@ -1,5 +1,5 @@
 <?php
-namespace App\Traits;
+namespace App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
