@@ -11,10 +11,10 @@ use App\Events\UserCreated;
 use App\Events\UserUpdated;
 use App\Events\UserDeleted;
 use Hash;
-
+use App\ModelActionCauser;
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, ModelActionCauser;
 
     /**
      * The attributes that are mass assignable.
